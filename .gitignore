@@ -6,3 +6,4 @@
 *.ko
 *.symvers
 *.order
+symbols.c
