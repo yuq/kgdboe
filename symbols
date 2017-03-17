@@ -1,4 +1,4 @@
 SYMS=""
-if version_ge ${KERNELVER_BASE} 4.1; then
-    SYMS+="set_memory_rw"
-fi
+#if version_ge ${KERNELVER_BASE} 4.1; then
+#    SYMS+="set_memory_rw"
+#fi

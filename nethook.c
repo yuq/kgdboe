@@ -126,7 +126,7 @@ bool nethook_initialize(struct net_device *dev)
 
 	spin_lock_init(&nethook.netdev_api_lock);
 
-	err = set_memory_rw(((unsigned long)dev->netdev_ops >> PAGE_SHIFT) << PAGE_SHIFT, 2);
+	err = bk_set_memory_rw(((unsigned long)dev->netdev_ops >> PAGE_SHIFT) << PAGE_SHIFT, 2);
 	if (err)
 	{
 		printk(KERN_ERR "Cannot change memory protection attributes of netdev_ops for %s. Aborting.", dev->name);

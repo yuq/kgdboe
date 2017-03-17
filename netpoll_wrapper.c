@@ -164,6 +164,7 @@ static void netpoll_wrapper_handle_arp(struct netpoll_wrapper *pWrapper, struct 
 	unsigned char *arp_ptr;
 	unsigned char *sha;
 	__be32 sip, tip;
+	int i;
 
 	if (!pskb_may_pull(skb, arp_hdr_len(skb->dev)))
 		return;
@@ -196,7 +197,7 @@ static void netpoll_wrapper_handle_arp(struct netpoll_wrapper *pWrapper, struct 
 	if (tip != ip_addr_as_int(pWrapper->netpoll_obj.local_ip))
 		return;	//This ARP request is not for our IP address
 
-	for (int i = 0; i < ARRAY_SIZE(pWrapper->pending_arp_replies); i++)
+	for (i = 0; i < ARRAY_SIZE(pWrapper->pending_arp_replies); i++)
 	{
 		if (!pWrapper->pending_arp_replies[i].valid)
 		{
@@ -403,6 +404,8 @@ static void netpoll_wrapper_send_arp_reply(struct netpoll_wrapper *pWrapper, str
 
 void netpoll_wrapper_poll(struct netpoll_wrapper *pWrapper)
 {
+	int i;
+
 	BUG_ON(!pWrapper);
 	pWrapper->handle_arp = true;
 
@@ -414,7 +417,7 @@ void netpoll_wrapper_poll(struct netpoll_wrapper *pWrapper)
 	netpoll_poll_dev_copy(pWrapper->netpoll_obj.dev, pWrapper->zap_completion_queue);
 #endif
 	pWrapper->handle_arp = false;
-	for (int i = 0; i < ARRAY_SIZE(pWrapper->pending_arp_replies); i++)
+	for (i = 0; i < ARRAY_SIZE(pWrapper->pending_arp_replies); i++)
 	{
 		if (pWrapper->pending_arp_replies[i].valid)
 		{

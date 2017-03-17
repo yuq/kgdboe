@@ -19,6 +19,7 @@ static bool s_StoppedInKgdb;
 
 static void kgdboe_rx_handler(void *pContext, int port, char *msg, int len)
 {
+	int i;
 	bool breakpointPending = false;
 
 	BUG_ON(!s_pKgdboeNetpoll);
@@ -26,7 +27,7 @@ static void kgdboe_rx_handler(void *pContext, int port, char *msg, int len)
 	if (!kgdb_connected && (len != 1 || msg[0] == 3))
 		breakpointPending = true;
 
-	for (int i = 0; i < len; i++) 
+	for (i = 0; i < len; i++) 
 	{
 		if (msg[i] == 3)
 			breakpointPending = true;
@@ -112,10 +113,12 @@ static struct kgdb_io kgdboe_io_ops = {
 
 void force_single_cpu_mode(void)
 {
+	int i;
+
 	printk(KERN_INFO "kgdboe: single-core mode enabled. Shutting down all cores except #0. This is slower, but safer.\n");
 	printk(KERN_INFO "kgdboe: you can try using multi-core mode by specifying the following argument:\n");
 	printk(KERN_INFO "\tinsmod kgdboe.ko force_single_core = 0\n");
-	for (int i = 1; i < nr_cpu_ids; i++)
+	for (i = 1; i < nr_cpu_ids; i++)
 		cpu_down(i);
 }
 

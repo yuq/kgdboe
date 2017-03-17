@@ -55,7 +55,11 @@ module_param(force_single_core, int, 0444);
 
 static int __init kgdboe_init(void)
 {
-	int err = kgdboe_io_init(device_name, udp_port, local_ip, force_single_core != 0);
+	int err;
+
+	bk_init();
+
+	err = kgdboe_io_init(device_name, udp_port, local_ip, force_single_core != 0);
 	if (err != 0)
 		return err;
 
